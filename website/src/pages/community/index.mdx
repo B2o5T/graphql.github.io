@@ -1,0 +1,155 @@
+---
+heroText: An open and neutral home for the GraphQL community, dedicated to promoting widespread adoption and accelerating development of the surrounding ecosystem
+layout: community
+category: GraphQL Community
+permalink: /community/
+---
+
+# Join the GraphQL Community
+
+The GraphQL community is growing fast, with conferences, workshops, and meetups happening around the world.
+
+Join our community to stay up to date with the latest developments, to learn from your peers, and to share your own experiences.
+
+Browse the list of community meetups below, or search through the GraphQL events to find an event near you.
+
+import { useData } from 'nextra/hooks'
+ 
+export const getStaticProps = async () => {
+  const meetups = await fetch('https://graphql-events.org/api/meetups').then((res) => res.json());
+  const events = await fetch('https://graphql-events.org/api/events').then((res) => res.json());
+  
+  return {
+    props: {
+      ssg: {
+        meetups,
+        events
+      },
+    },
+  }
+}
+ 
+export const CommunityIntro = () => {
+  const { meetups } = useData();
+
+  return <p>Join one of <strong>{meetups.length}</strong> GraphQL Meetups around the world!</p>
+}
+
+export const UrlList = ({ urls }) => {
+  return (
+    <div>
+      <ul className="list-disc ml-3">
+        {urls.map((link) => (
+          <li key={link.href}>
+            <a
+              href={link.href}
+              className="block p-1 text-sm"
+            >
+              {link.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export const CommunityList = () => {
+  const data = useData();
+  const meetups = data.meetups;
+  const unsetContinents = meetups.map((meetup) => meetup.continent);
+  const continents = [...new Set(unsetContinents)];
+
+  return (
+    <div>
+      <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
+          {continents.map((continent, index) => {
+            const urls = meetups.filter(
+              (meetup) => meetup.continent === continent
+            );
+
+            return (
+              <div key={index}>
+                <h3>{continent}</h3> 
+                <UrlList urls={urls}/>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export const EventsIntro = () => {
+  const { events } = useData();
+
+  return <p>Join one of <strong>{events.length}</strong> recent or upcoming GraphQL events around the world!</p>
+}
+
+export const EventsList = () => {
+  const data = useData();
+  const events = data.events;
+
+  return (
+    <div className='mt-5'>
+      <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
+          {events.map((event) => {
+            return (
+              <div
+                key={event.slug}
+                className="rounded-lg shadow-md"
+              >
+                <img
+                  loading="lazy"
+                  src={event.coverImage}
+                  alt={event.name}
+                  className="w-full h-40 object-contain"
+                />
+                <div className="p-4 flex flex-col gap-3">
+                  <a
+                    href={event.eventLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-md font-semibold mb-2 underline"
+                  >
+                    {event.name}
+                  </a>
+                  <p className="text-xs">
+                    Hosted by:{" "}
+                    <a
+                      href={event.hostLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold underline"
+                    >
+                      {event.host}
+                    </a>
+                  </p>
+                </div>
+                <div className="p-4">
+                  <p className="text-xs">
+                    Location:{" "}
+                    <span className="font-bold">{event.location}</span>
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+## GraphQL Communities
+<CommunityIntro/>
+
+<CommunityList/>
+
+## GraphQL Events
+<EventsIntro/>
+
+<EventsList/>
