@@ -6,7 +6,8 @@ import { glob } from "glob"
 import { updateCodeData } from "./scripts/update-code-data/update-code-data"
 import { organizeCodeData } from "./scripts/update-code-data/organize-code-data"
 import { sortCodeData } from "./scripts/update-code-data/sort-code-data"
-import redirects from "./redirects.json"
+import { RelativeCiAgentWebpackPlugin } from "@relative-ci/agent"
+import { StatsWriterPlugin } from "webpack-stats-plugin"
 
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
@@ -537,12 +538,26 @@ export const createPages: GatsbyNode["createPages"] = async ({
 }
 
 export const onCreateWebpackConfig: GatsbyNode["onCreateWebpackConfig"] =
-  async ({ actions }) => {
+  async ({ actions, stage }) => {
     actions.setWebpackConfig({
       resolve: {
         fallback: {
           assert: "assert/",
         },
       },
+      ...(stage === "build-javascript" && {
+        plugins: [
+          new RelativeCiAgentWebpackPlugin(),
+          new StatsWriterPlugin({
+            enabled: true,
+            filename: "./webpack-stats.json",
+            stats: {
+              assets: true,
+              chunks: true,
+              modules: true,
+            },
+          }),
+        ],
+      })
     })
   }

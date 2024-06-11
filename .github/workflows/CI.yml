@@ -11,7 +11,7 @@ jobs:
         with:
           node-version: "18.15.0"
 
-      - run: yarn install
+      - run: yarn
 
       # Verify it compiles
       - run: yarn build
