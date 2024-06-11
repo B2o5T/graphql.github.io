@@ -80,3 +80,6 @@ yarn-error.log
 src/__generated__/
 
 .idea/
+
+.next/
+out/

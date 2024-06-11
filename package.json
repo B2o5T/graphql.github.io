@@ -57,6 +57,7 @@
     "timeago.js": "4.0.2"
   },
   "devDependencies": {
+    "@relative-ci/agent": "4.2.8",
     "@svgr/webpack": "^8.0.0",
     "@tailwindcss/typography": "0.5.9",
     "@types/codemirror": "5.60.7",
