@@ -553,7 +553,7 @@ export const onCreateWebpackConfig: GatsbyNode["onCreateWebpackConfig"] =
         plugins: [
           new RelativeCiAgentWebpackPlugin(),
           new StatsWriterPlugin({
-            filename: "../webpack-stats.json",
+            filename: "./webpack-stats.json",
             stats: {
               assets: true,
               chunks: true,
