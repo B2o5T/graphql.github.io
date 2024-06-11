@@ -12,6 +12,9 @@ require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
+import { RelativeCiAgentWebpackPlugin } from "@relative-ci/agent"
+import { StatsWriterPlugin } from "webpack-stats-plugin"
+
 export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
   async ({ actions }) => {
     const gql = String.raw
@@ -537,7 +540,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
 }
 
 export const onCreateWebpackConfig: GatsbyNode["onCreateWebpackConfig"] =
-  async ({ actions }) => {
+  async ({ actions, stage }) => {
     actions.setWebpackConfig({
       resolve: {
         fallback: {
@@ -545,4 +548,19 @@ export const onCreateWebpackConfig: GatsbyNode["onCreateWebpackConfig"] =
         },
       },
     })
+    if (stage === "build-javascript") {
+      actions.setWebpackConfig({
+        plugins: [
+          new RelativeCiAgentWebpackPlugin(),
+          new StatsWriterPlugin({
+            filename: "../webpack-stats.json",
+            stats: {
+              assets: true,
+              chunks: true,
+              modules: true,
+            },
+          }),
+        ],
+      })
+    }
   }

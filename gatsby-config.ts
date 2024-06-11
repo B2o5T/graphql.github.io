@@ -1,13 +1,4 @@
 import type { GatsbyConfig } from "gatsby"
-import { RelativeCiAgentWebpackPlugin } from "@relative-ci/agent"
-
-exports.onCreateWebpackConfig = ({ stage, actions }) => {
-  if (stage === "build-javascript") {
-    actions.setWebpackConfig({
-      plugins: [new RelativeCiAgentWebpackPlugin()],
-    })
-  }
-}
 
 const config: GatsbyConfig = {
   siteMetadata: {
