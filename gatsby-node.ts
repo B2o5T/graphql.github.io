@@ -7,13 +7,13 @@ import { updateCodeData } from "./scripts/update-code-data/update-code-data"
 import { organizeCodeData } from "./scripts/update-code-data/organize-code-data"
 import { sortCodeData } from "./scripts/update-code-data/sort-code-data"
 import redirects from "./redirects.json"
+import { RelativeCiAgentWebpackPlugin } from "@relative-ci/agent"
+import { StatsWriterPlugin } from "webpack-stats-plugin"
 
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
-import { RelativeCiAgentWebpackPlugin } from "@relative-ci/agent"
-import { StatsWriterPlugin } from "webpack-stats-plugin"
 
 export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
   async ({ actions }) => {
